@@ -1,0 +1,28 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2013
+VisualStudioVersion = 12.0.40629.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Nancy.JsonPatch", "Nancy.JsonPatch\Nancy.JsonPatch.csproj", "{819E9C68-5279-47DE-B0F0-DE651A3AF004}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Nancy.JsonPatch.Tests", "Nancy.JsonPatch.Tests\Nancy.JsonPatch.Tests.csproj", "{6648CEC9-322F-459B-8795-EFE1499F27CE}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{819E9C68-5279-47DE-B0F0-DE651A3AF004}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{819E9C68-5279-47DE-B0F0-DE651A3AF004}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{819E9C68-5279-47DE-B0F0-DE651A3AF004}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{819E9C68-5279-47DE-B0F0-DE651A3AF004}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6648CEC9-322F-459B-8795-EFE1499F27CE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6648CEC9-322F-459B-8795-EFE1499F27CE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6648CEC9-322F-459B-8795-EFE1499F27CE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6648CEC9-322F-459B-8795-EFE1499F27CE}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
