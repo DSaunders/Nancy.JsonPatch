@@ -9,7 +9,7 @@ namespace Nancy.JsonPatch.PathParser
 
     internal class JsonPatchPathParser
     {
-        public JsonPatchPath GetThing<T>(string path, T target)
+        public JsonPatchPath ParsePath<T>(string path, T target)
         {
             var pathObject = new JsonPatchPath();
 
@@ -40,7 +40,7 @@ namespace Nancy.JsonPatch.PathParser
             var lastProperty = pathSections.Last();
             
             int indexer;
-            if (int.TryParse(lastProperty, out indexer))
+            if (int.TryParse(lastProperty, out indexer) || lastProperty.Equals("-"))
             {
                 // Last section of path is an indexer, return the parent object as the target
                 pathObject.IsCollection = true;

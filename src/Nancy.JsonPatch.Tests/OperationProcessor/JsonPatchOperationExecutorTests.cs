@@ -42,6 +42,24 @@
             target.ValueType.ShouldEqual(default(int));
         }
 
-       
+        [Fact]
+        public void Add_Adds_Item_To_Collection_Before_Index()
+        {
+            // Arrange
+
+            // Act
+
+            // Assert
+        }
+
+        [Fact]
+        public void Add_Adds_Item_To_Collection_To_End_If_Minus_Passed_As_Path()
+        {
+            // Arrange
+
+            // Act
+
+            // Assert
+        }
     }
 }

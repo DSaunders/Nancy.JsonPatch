@@ -20,7 +20,7 @@ namespace Nancy.JsonPatch.Tests.PathParser
         public void Throws_If_Path_Is_Empty()
         {
             // Act
-            var ex = Record.Exception(() => _pathParser.GetThing(string.Empty, new Object()));
+            var ex = Record.Exception(() => _pathParser.ParsePath(string.Empty, new Object()));
 
             // Assert
             ex.ShouldNotBeNull();
@@ -32,7 +32,7 @@ namespace Nancy.JsonPatch.Tests.PathParser
         public void Throws_If_Path_Refers_To_DoubleQuote_Property_On_Object()
         {
             // Act
-            var ex = Record.Exception(() => _pathParser.GetThing("/", new Object()));
+            var ex = Record.Exception(() => _pathParser.ParsePath("/", new Object()));
 
             // Assert
             ex.ShouldNotBeNull();
@@ -44,7 +44,7 @@ namespace Nancy.JsonPatch.Tests.PathParser
         public void Throws_If_Path_Does_Not_Start_With_Slash()
         {
             // Act
-            var ex = Record.Exception(() => _pathParser.GetThing("SomeProperty", new Object()));
+            var ex = Record.Exception(() => _pathParser.ParsePath("SomeProperty", new Object()));
 
             // Assert
             ex.ShouldNotBeNull();
@@ -59,7 +59,7 @@ namespace Nancy.JsonPatch.Tests.PathParser
             var target = new ExampleTarget();
 
             // Act
-            var result = _pathParser.GetThing("/Name", target);
+            var result = _pathParser.ParsePath("/Name", target);
 
             // Assert
             result.IsCollection.ShouldBeFalse();
@@ -75,7 +75,7 @@ namespace Nancy.JsonPatch.Tests.PathParser
             var target = new ExampleTarget();
 
             // Act
-            var ex = Record.Exception(() => _pathParser.GetThing("/DoesntExist", target));
+            var ex = Record.Exception(() => _pathParser.ParsePath("/DoesntExist", target));
 
             // Assert
             ex.ShouldNotBeNull();
@@ -90,7 +90,7 @@ namespace Nancy.JsonPatch.Tests.PathParser
             var target = new ExampleTarget();
 
             // Act
-            var ex = Record.Exception(() => _pathParser.GetThing("/CantSetMe", target));
+            var ex = Record.Exception(() => _pathParser.ParsePath("/CantSetMe", target));
 
             // Assert
             ex.ShouldNotBeNull();
@@ -109,7 +109,7 @@ namespace Nancy.JsonPatch.Tests.PathParser
             };
 
             // Act
-            var path =_pathParser.GetThing("/Child/ChildName", target);
+            var path =_pathParser.ParsePath("/Child/ChildName", target);
 
             // Assert
             path.IsCollection.ShouldBeFalse();
@@ -124,7 +124,7 @@ namespace Nancy.JsonPatch.Tests.PathParser
             var target = new ExampleTarget();
 
             // Act
-            var ex = Record.Exception(() => _pathParser.GetThing("/Child/ChildName", target));
+            var ex = Record.Exception(() => _pathParser.ParsePath("/Child/ChildName", target));
 
             // Assert
             ex.ShouldNotBeNull();
@@ -139,7 +139,7 @@ namespace Nancy.JsonPatch.Tests.PathParser
             var target = new ExampleTarget { Child = new ExampleTargetChild() };
 
             // Act
-            var ex = Record.Exception(() => _pathParser.GetThing("/Child/ChildCantSetMe", target));
+            var ex = Record.Exception(() => _pathParser.ParsePath("/Child/ChildCantSetMe", target));
 
             // Assert
             ex.ShouldNotBeNull();
@@ -148,7 +148,7 @@ namespace Nancy.JsonPatch.Tests.PathParser
         }
 
         [Fact]
-        public void Finds_Items_In_Collections()
+        public void Refers_To_Items_In_Collections()
         {
             // Arrange
             var target = new ExampleTarget
@@ -157,12 +157,30 @@ namespace Nancy.JsonPatch.Tests.PathParser
             };
 
             // Act
-            var path = _pathParser.GetThing("/StringList/1", target);
+            var path = _pathParser.ParsePath("/StringList/1", target);
 
             // Assert
             path.IsCollection.ShouldBeTrue();
             path.TargetObject.ShouldEqual(target.StringList);
             path.TargetPropertyName.ShouldEqual("1");
+        }
+
+        [Fact]
+        public void Returns_Collection_And_Indexer_If_Minus_Passed()
+        {
+            // Arrange
+            var target = new ExampleTarget
+            {
+                StringList = new List<string> { "foo", "bar", "baz" }
+            };
+
+            // Act
+            var path = _pathParser.ParsePath("/StringList/-", target);
+
+            // Assert
+            path.IsCollection.ShouldBeTrue();
+            path.TargetObject.ShouldEqual(target.StringList);
+            path.TargetPropertyName.ShouldEqual("-");
         }
 
         [Fact]
@@ -180,7 +198,7 @@ namespace Nancy.JsonPatch.Tests.PathParser
             };
 
             // Act
-            var path = _pathParser.GetThing("/ChildList/1/ChildName", target);
+            var path = _pathParser.ParsePath("/ChildList/1/ChildName", target);
 
             // Assert
             path.IsCollection.ShouldBeFalse();
@@ -195,7 +213,7 @@ namespace Nancy.JsonPatch.Tests.PathParser
             var target = new ExampleTarget { Name = "Hello" };
 
             // Act
-            var ex = Record.Exception(() => _pathParser.GetThing("/Name/1/Something", target));
+            var ex = Record.Exception(() => _pathParser.ParsePath("/Name/1/Something", target));
 
             // Assert
             ex.ShouldNotBeNull();
@@ -218,7 +236,7 @@ namespace Nancy.JsonPatch.Tests.PathParser
             };
 
             // Act
-            var ex = Record.Exception(() => _pathParser.GetThing("/ChildList/1/ChildName/2", target));
+            var ex = Record.Exception(() => _pathParser.ParsePath("/ChildList/1/ChildName/2", target));
 
             // Assert
             ex.ShouldNotBeNull();
