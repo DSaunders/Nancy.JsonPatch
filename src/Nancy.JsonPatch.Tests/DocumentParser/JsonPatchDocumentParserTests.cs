@@ -1,18 +1,18 @@
-﻿namespace Nancy.JsonPatch.Tests.Parser
+﻿namespace Nancy.JsonPatch.Tests.DocumentParser
 {
     using System.Collections;
     using System.Linq;
     using Exceptions;
-    using JsonPatch.Parser;
+    using JsonPatch.DocumentParser;
     using Models;
     using Should;
     using Xunit;
 
-    public class JsonPatchParserTests
+    public class JsonPatchDocumentParserTests
     {
         private readonly JsonPatchDocumentParser _documentParser;
 
-        public JsonPatchParserTests()
+        public JsonPatchDocumentParserTests()
         {
             _documentParser = new JsonPatchDocumentParser();
         }
@@ -24,10 +24,10 @@
             var patchDocument =
                 "[" +
                 "   { \"op\": \"add\", \"path\": \"/baz\", \"value\": \"boo\" }," +
-                "   { \"op\": \"remove\", \"path\": \"/hello\", \"value\": \"world\" }," +
+                "   { \"op\": \"remove\", \"path\": \"/hello\" }," +
                 "   { \"op\": \"replace\", \"path\": \"/hello\", \"value\": \"world\" }," +
-                "   { \"op\": \"move\", \"path\": \"/hello\", \"value\": \"world\" }," +
-                "   { \"op\": \"copy\", \"path\": \"/hello\", \"value\": \"world\" }," +
+                "   { \"op\": \"move\", \"path\": \"/hello\", \"from\": \"/world\" }," +
+                "   { \"op\": \"copy\", \"path\": \"/hello\", \"from\": \"/world\" }," +
                 "   { \"op\": \"test\", \"path\": \"/hello\", \"value\": \"world\" }" +
                 "]";
 
@@ -40,11 +40,18 @@
             result[0].Value.ShouldEqual("boo");
             result[1].Op.ShouldEqual(JsonPatchOpCode.remove);
             result[1].Path.ShouldEqual("/hello");
-            result[1].Value.ShouldEqual("world");
             result[2].Op.ShouldEqual(JsonPatchOpCode.replace);
+            result[2].Path.ShouldEqual("/hello");
+            result[2].Value.ShouldEqual("world");
             result[3].Op.ShouldEqual(JsonPatchOpCode.move);
+            result[3].Path.ShouldEqual("/hello");
+            result[3].From.ShouldEqual("/world");
             result[4].Op.ShouldEqual(JsonPatchOpCode.copy);
+            result[4].Path.ShouldEqual("/hello");
+            result[4].From.ShouldEqual("/world");
             result[5].Op.ShouldEqual(JsonPatchOpCode.test);
+            result[5].Path.ShouldEqual("/hello");
+            result[5].Value.ShouldEqual("world");
         }
 
         [Fact]

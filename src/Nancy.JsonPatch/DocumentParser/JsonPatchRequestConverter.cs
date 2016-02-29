@@ -1,4 +1,4 @@
-﻿namespace Nancy.JsonPatch.Parser
+﻿namespace Nancy.JsonPatch.DocumentParser
 {
     using System;
     using System.Collections.Generic;
@@ -37,7 +37,12 @@
             if (operation.Path == null)
                 throw new JsonPatchParseException("Cannot deserialize JSON patch operation. The 'path' property must be a string");
 
-            operation.Value = dictionary["Value"];
+            if (dictionary.ContainsKey("Value"))
+                operation.Value = dictionary["Value"];
+
+            if (dictionary.ContainsKey("From"))
+                operation.From = dictionary["From"] as string;
+
             return operation;
         }
 

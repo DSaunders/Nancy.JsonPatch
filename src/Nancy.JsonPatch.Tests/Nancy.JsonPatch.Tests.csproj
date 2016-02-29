@@ -70,7 +70,7 @@
     <Compile Include="OperationProcessor\JsonPatchOperationExecutorTests.cs" />
     <Compile Include="PathParser\JsonPatchPathParserTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Parser\JsonPatchParserTests.cs" />
+    <Compile Include="DocumentParser\JsonPatchDocumentParserTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

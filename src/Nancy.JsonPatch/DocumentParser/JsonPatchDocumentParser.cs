@@ -1,4 +1,4 @@
-﻿namespace Nancy.JsonPatch.Parser
+﻿namespace Nancy.JsonPatch.DocumentParser
 {
     using System.Collections.Generic;
     using Json;

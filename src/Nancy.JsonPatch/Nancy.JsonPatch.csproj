@@ -49,10 +49,10 @@
     <Compile Include="OperationProcessor\JsonPatchOperationExecutor.cs" />
     <Compile Include="PathParser\JsonPatchPathParser.cs" />
     <Compile Include="Models\JsonPatchPath.cs" />
-    <Compile Include="Parser\JsonPatchDocumentParser.cs" />
+    <Compile Include="DocumentParser\JsonPatchDocumentParser.cs" />
     <Compile Include="Models\JsonPatchOperation.cs" />
     <Compile Include="Models\JsonPatchOpCode.cs" />
-    <Compile Include="Parser\JsonPatchRequestConverter.cs" />
+    <Compile Include="DocumentParser\JsonPatchRequestConverter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
