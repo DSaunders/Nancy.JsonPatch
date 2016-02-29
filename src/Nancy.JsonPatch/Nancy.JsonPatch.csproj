@@ -45,7 +45,7 @@
   <ItemGroup>
     <Compile Include="Exceptions\JsonPatchException.cs" />
     <Compile Include="Exceptions\JsonPatchParseException.cs" />
-    <Compile Include="Exceptions\JsonPatchProcessException.cs" />
+    <Compile Include="Exceptions\JsonPatchPathException.cs" />
     <Compile Include="OperationProcessor\JsonPatchOperationExecutor.cs" />
     <Compile Include="PathParser\JsonPatchPathParser.cs" />
     <Compile Include="Models\JsonPatchPath.cs" />

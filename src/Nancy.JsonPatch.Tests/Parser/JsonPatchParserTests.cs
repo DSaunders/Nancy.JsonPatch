@@ -155,17 +155,5 @@
             ex.ShouldBeType<JsonPatchParseException>();
             ex.Message.ShouldEqual("Cannot deserialize JSON patch operation. The 'path' property must be a string");
         }
-
-        [Fact(Skip = "Not done yet")]
-        public void Throws_If_Path_Is_Empty()
-        {
-            
-        }
-
-        [Fact(Skip = "Not done yet")]
-        public void Throws_If_Path_Refers_To_Root_Of_Object()
-        {
-
-        }
     }
 }
