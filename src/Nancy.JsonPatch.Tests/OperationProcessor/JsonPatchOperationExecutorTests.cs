@@ -234,8 +234,79 @@
             exampleTarget.ValueType.ShouldEqual(999);
         }
 
-        // TODO add puts before indexer in collection
+        [Fact]
+        public void Adds_Items_Before_Indexer_Of_Collection()
+        {
+            // Given
+            var exampleTarget = new ExampleTarget
+            {
+                IntList = new List<int> { 3, 4, 5 }
+            };
 
-        // TODO add adds to end of array
+            var path = new JsonPatchPath
+            {
+                TargetObject = exampleTarget.IntList,
+                IsCollection = true,
+                TargetPropertyName = "1"
+            };
+
+            // When
+            _executor.Add(path, 999);
+
+            // Then
+            exampleTarget.IntList[0].ShouldEqual(3);
+            exampleTarget.IntList[1].ShouldEqual(999);
+            exampleTarget.IntList[2].ShouldEqual(4);
+            exampleTarget.IntList[3].ShouldEqual(5);
+        }
+
+        [Fact]
+        public void Adds_Items_To_End_Of_Collection_If_Indexer_Is_Minus()
+        {
+            // Given
+            var exampleTarget = new ExampleTarget
+            {
+                IntList = new List<int> { 3, 4, 5 }
+            };
+
+            var path = new JsonPatchPath
+            {
+                TargetObject = exampleTarget.IntList,
+                IsCollection = true,
+                TargetPropertyName = "-"
+            };
+
+            // When
+            _executor.Add(path, 999);
+
+            // Then
+            exampleTarget.IntList[0].ShouldEqual(3);
+            exampleTarget.IntList[1].ShouldEqual(4);
+            exampleTarget.IntList[2].ShouldEqual(5);
+            exampleTarget.IntList[3].ShouldEqual(999);
+        }
+
+        [Fact]
+        public void Adds_Items_To_Empty_Collections()
+        {
+            // Given
+            var exampleTarget = new ExampleTarget
+            {
+                IntList = new List<int>()
+            };
+
+            var path = new JsonPatchPath
+            {
+                TargetObject = exampleTarget.IntList,
+                IsCollection = true,
+                TargetPropertyName = "-"
+            };
+
+            // When
+            _executor.Add(path, 999);
+
+            // Then
+            exampleTarget.IntList[0].ShouldEqual(999);
+        }
     }
 }

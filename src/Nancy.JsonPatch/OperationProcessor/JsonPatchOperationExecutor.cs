@@ -30,8 +30,8 @@
             if (path.IsCollection)
             {
                 var listIndex = int.Parse(path.TargetPropertyName);
-                var targetType = ((IList)path.TargetObject)[listIndex].GetType();
-                var convertedType = ConvertToType(value, targetType);
+                var listType = path.TargetObject.GetType().GetGenericArguments()[0];
+                var convertedType = ConvertToType(value, listType);
                 ((IList)path.TargetObject)[listIndex] = convertedType;
             }
             else
@@ -47,7 +47,25 @@
         public void Add<T>(JsonPatchPath path, T value)
         {
             if (!path.IsCollection)
+            {
                 Replace(path, value);
+                return;
+            }
+
+            var listType = path.TargetObject.GetType().GetGenericArguments()[0];
+            var typedObject = ConvertToType(value, listType);
+
+            if (path.TargetPropertyName.Equals("-"))
+            {
+                // Add to the end of the collection
+                ((IList) path.TargetObject).Add(typedObject);
+            }
+            else
+            {
+                // Add before the item in the index
+                var listIndex = int.Parse(path.TargetPropertyName);
+                ((IList)path.TargetObject).Insert(listIndex, typedObject);
+            }
         }
 
         private object ConvertToType(object target, Type type)
