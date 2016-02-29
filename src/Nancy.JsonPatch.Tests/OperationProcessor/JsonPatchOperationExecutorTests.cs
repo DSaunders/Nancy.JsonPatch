@@ -44,6 +44,7 @@
             target.ValueType.ShouldEqual(default(int));
         }
 
+
         [Fact]
         public void Replaces_Reference_Types()
         {
@@ -182,6 +183,7 @@
             ex.Message.ShouldEqual("The value could not be converted to type ExampleTargetChild");
         }
 
+
         [Fact]
         public void Add_Replaces_Reference_Types()
         {
@@ -307,6 +309,31 @@
 
             // Then
             exampleTarget.IntList[0].ShouldEqual(999);
+        }
+
+        [Fact]
+        public void Add_Throws_If_Cannot_Cast_To_Original_Property_Type()
+        {
+            // Given
+            var exampleTarget = new ExampleTarget
+            {
+                IntList = new List<int>()
+            };
+
+            var path = new JsonPatchPath
+            {
+                TargetObject = exampleTarget.IntList,
+                IsCollection = true,
+                TargetPropertyName = "-"
+            };
+
+            // When
+            var ex = Record.Exception(() => _executor.Add(path, "This is an invalid value for the Child Type"));
+
+            // Then
+            ex.ShouldNotBeNull();
+            ex.ShouldBeType<JsonPatchValueException>();
+            ex.Message.ShouldEqual("The value could not be converted to type Int32");
         }
     }
 }
