@@ -19,35 +19,35 @@
         [Fact]
         public void Remove_Operation_Nulls_Field()
         {
-            // Arrange
+            // Given
             var target = new ExampleTarget { Name = "Bob the Builder" };
-            var path = new JsonPatchPath {TargetObject = target, TargetPropertyName = "Name"};
+            var path = new JsonPatchPath { TargetObject = target, TargetPropertyName = "Name" };
 
-            // Act
+            // When
             _executor.Remove(path);
 
-            // Assert
+            // Then
             target.Name.ShouldBeNull();
         }
 
         [Fact]
         public void Remove_Operation_Sets_Default_Value_If_Target_Field_Not_Nullable()
         {
-            // Arrange
+            // Given
             var target = new ExampleTarget { ValueType = 999 };
             var path = new JsonPatchPath { TargetObject = target, TargetPropertyName = "ValueType" };
 
-            // Act
+            // When
             _executor.Remove(path);
 
-            // Assert
+            // Then
             target.ValueType.ShouldEqual(default(int));
         }
 
         [Fact]
         public void Replaces_Reference_Types()
         {
-            // Arrange
+            // Given
             var exampleTarget = new ExampleTarget
             {
                 Child = new ExampleTargetChild
@@ -63,27 +63,25 @@
                 TargetPropertyName = "Child"
             };
 
-            // Act
-            _executor.Replace(path, new JsonPatchOperation
+            // When
+            _executor.Replace(path, new Dictionary<string, object>
             {
-                Value = new Dictionary<string, object>
-                {
-                    {"ChildName", "New Child"}
-                }
+                {"ChildName", "New Child"}
             });
 
-            // Assert
+            // Then
             exampleTarget.Child.ChildName.ShouldEqual("New Child");
         }
 
         [Fact]
         public void Replaces_Value_Types()
         {
-            // Arrange
+            // Given
             var exampleTarget = new ExampleTarget
             {
                 ValueType = 1234
             };
+
             var path = new JsonPatchPath
             {
                 TargetObject = exampleTarget,
@@ -91,20 +89,17 @@
                 TargetPropertyName = "ValueType"
             };
 
-            // Act
-            _executor.Replace(path, new JsonPatchOperation
-            {
-                Value = 999
-            });
+            // When
+            _executor.Replace(path, 999);
 
-            // Assert
+            // Then
             exampleTarget.ValueType.ShouldEqual(999);
         }
 
         [Fact]
         public void Replaces_Reference_Types_In_Collections()
         {
-            // Arrange
+            // Given
             var exampleTarget = new ExampleTarget
             {
                 ChildList = new List<ExampleTargetChild>
@@ -122,16 +117,13 @@
                 TargetPropertyName = "1"
             };
 
-            // Act
-            _executor.Replace(path, new JsonPatchOperation
-            {
-                Value = new Dictionary<string, object>
+            // When
+            _executor.Replace(path, new Dictionary<string, object>
                 {
                     {"ChildName", "New Child"}
-                }
-            });
+                });
 
-            // Assert
+            // Then
             exampleTarget.ChildList[0].ChildName.ShouldEqual("Child 1");
             exampleTarget.ChildList[1].ChildName.ShouldEqual("New Child");
             exampleTarget.ChildList[2].ChildName.ShouldEqual("Child 3");
@@ -140,10 +132,10 @@
         [Fact]
         public void Replaces_Value_Types_In_Collections()
         {
-            // Arrange
+            // Given
             var exampleTarget = new ExampleTarget
             {
-                IntList = new List<int> {3, 4, 5}
+                IntList = new List<int> { 3, 4, 5 }
             };
 
             var path = new JsonPatchPath
@@ -153,13 +145,10 @@
                 TargetPropertyName = "1"
             };
 
-            // Act
-            _executor.Replace(path, new JsonPatchOperation
-            {
-                Value = 999
-            });
+            // When
+            _executor.Replace(path, 999);
 
-            // AssertS
+            // Then
             exampleTarget.IntList[0].ShouldEqual(3);
             exampleTarget.IntList[1].ShouldEqual(999);
             exampleTarget.IntList[2].ShouldEqual(5);
@@ -168,7 +157,7 @@
         [Fact]
         public void Replace_Throws_If_Cannot_Cast_To_Original_Property_Type()
         {
-            // Arrange
+            // Given
             var exampleTarget = new ExampleTarget
             {
                 Child = new ExampleTargetChild
@@ -184,16 +173,69 @@
                 TargetPropertyName = "Child"
             };
 
-            // Act
-           var ex = Record.Exception(() => _executor.Replace(path, new JsonPatchOperation
-            {
-                Value = "This is an invalid value for the Child Type"
-            }));
+            // When
+            var ex = Record.Exception(() => _executor.Replace(path, "This is an invalid value for the Child Type"));
 
-            // Assert
+            // Then
             ex.ShouldNotBeNull();
             ex.ShouldBeType<JsonPatchValueException>();
             ex.Message.ShouldEqual("The value could not be converted to type ExampleTargetChild");
         }
+
+        [Fact]
+        public void Add_Replaces_Reference_Types()
+        {
+            // Given
+            var exampleTarget = new ExampleTarget
+            {
+                Child = new ExampleTargetChild
+                {
+                    ChildName = "Old Child"
+                }
+            };
+
+            var path = new JsonPatchPath
+            {
+                TargetObject = exampleTarget,
+                IsCollection = false,
+                TargetPropertyName = "Child"
+            };
+
+            // When
+            _executor.Add(path, new Dictionary<string, object>
+                {
+                    {"ChildName", "New Child"}
+                });
+
+            // Then
+            exampleTarget.Child.ChildName.ShouldEqual("New Child");
+        }
+
+        [Fact]
+        public void Add_Replaces_Value_Types()
+        {
+            // Given
+            var exampleTarget = new ExampleTarget
+            {
+                ValueType = 1234
+            };
+
+            var path = new JsonPatchPath
+            {
+                TargetObject = exampleTarget,
+                IsCollection = false,
+                TargetPropertyName = "ValueType"
+            };
+
+            // When
+            _executor.Add(path, 999);
+
+            // Then
+            exampleTarget.ValueType.ShouldEqual(999);
+        }
+
+        // TODO add puts before indexer in collection
+
+        // TODO add adds to end of array
     }
 }

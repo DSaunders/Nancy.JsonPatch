@@ -19,10 +19,10 @@ namespace Nancy.JsonPatch.Tests.PathParser
         [Fact]
         public void Throws_If_Path_Is_Empty()
         {
-            // Act
+            // When
             var ex = Record.Exception(() => _pathParser.ParsePath(string.Empty, new Object()));
 
-            // Assert
+            // Then
             ex.ShouldNotBeNull();
             ex.ShouldBeType<JsonPatchPathException>();
             ex.Message.ShouldEqual("Could not parse the path \"\". Nancy.Json cannot modify the root of the object");
@@ -31,10 +31,10 @@ namespace Nancy.JsonPatch.Tests.PathParser
         [Fact]
         public void Throws_If_Path_Refers_To_DoubleQuote_Property_On_Object()
         {
-            // Act
+            // When
             var ex = Record.Exception(() => _pathParser.ParsePath("/", new Object()));
 
-            // Assert
+            // Then
             ex.ShouldNotBeNull();
             ex.ShouldBeType<JsonPatchPathException>();
             ex.Message.ShouldEqual("Could not parse the path \"/\". This path is not valid in Nancy.Json");
@@ -43,10 +43,10 @@ namespace Nancy.JsonPatch.Tests.PathParser
         [Fact]
         public void Throws_If_Path_Does_Not_Start_With_Slash()
         {
-            // Act
+            // When
             var ex = Record.Exception(() => _pathParser.ParsePath("SomeProperty", new Object()));
 
-            // Assert
+            // Then
             ex.ShouldNotBeNull();
             ex.ShouldBeType<JsonPatchPathException>();
             ex.Message.ShouldEqual("Could not parse the path \"SomeProperty\". Path must start with a '/'");
@@ -55,13 +55,13 @@ namespace Nancy.JsonPatch.Tests.PathParser
         [Fact]
         public void Find_Simple_Paths()
         {
-            // Arrange
+            // Given
             var target = new ExampleTarget();
 
-            // Act
+            // When
             var result = _pathParser.ParsePath("/Name", target);
 
-            // Assert
+            // Then
             result.IsCollection.ShouldBeFalse();
             result.TargetObject.ShouldEqual(target);
             result.TargetPropertyName.ShouldEqual("Name");
@@ -71,13 +71,13 @@ namespace Nancy.JsonPatch.Tests.PathParser
         [Fact]
         public void Throws_If_Target_Field_Does_Not_Exist()
         {
-            // Arrange
+            // Given
             var target = new ExampleTarget();
 
-            // Act
+            // When
             var ex = Record.Exception(() => _pathParser.ParsePath("/DoesntExist", target));
 
-            // Assert
+            // Then
             ex.ShouldNotBeNull();
             ex.ShouldBeType<JsonPatchPathException>();
             ex.Message.ShouldEqual("Could not find path '/DoesntExist' in target object");
@@ -86,13 +86,13 @@ namespace Nancy.JsonPatch.Tests.PathParser
         [Fact]
         public void Throws_If_Target_Field_Has_No_Setter()
         {
-            // Arrange
+            // Given
             var target = new ExampleTarget();
 
-            // Act
+            // When
             var ex = Record.Exception(() => _pathParser.ParsePath("/CantSetMe", target));
 
-            // Assert
+            // Then
             ex.ShouldNotBeNull();
             ex.ShouldBeType<JsonPatchPathException>();
             ex.Message.ShouldEqual("Property '/CantSetMe' on target object cannot be set");
@@ -102,16 +102,16 @@ namespace Nancy.JsonPatch.Tests.PathParser
         [Fact]
         public void Finds_Nested_Fields()
         {
-            // Arrange
+            // Given
             var target = new ExampleTarget
             {
                 Child = new ExampleTargetChild { ChildName = "Peter Pan " }
             };
 
-            // Act
+            // When
             var path =_pathParser.ParsePath("/Child/ChildName", target);
 
-            // Assert
+            // Then
             path.IsCollection.ShouldBeFalse();
             path.TargetObject.ShouldEqual(target.Child);
             path.TargetPropertyName.ShouldEqual("ChildName");
@@ -120,13 +120,13 @@ namespace Nancy.JsonPatch.Tests.PathParser
         [Fact]
         public void Throws_If_Path_To_Nested_Child_Is_Null()
         {
-            // Arrange
+            // Given
             var target = new ExampleTarget();
 
-            // Act
+            // When
             var ex = Record.Exception(() => _pathParser.ParsePath("/Child/ChildName", target));
 
-            // Assert
+            // Then
             ex.ShouldNotBeNull();
             ex.ShouldBeType<JsonPatchPathException>();
             ex.Message.ShouldEqual("Could not access path '/Child/ChildName' in target object. 'Child' is null");
@@ -135,13 +135,13 @@ namespace Nancy.JsonPatch.Tests.PathParser
         [Fact]
         public void Throws_If_Nested_Target_Field_Has_No_Setter()
         {
-            // Arrange
+            // Given
             var target = new ExampleTarget { Child = new ExampleTargetChild() };
 
-            // Act
+            // When
             var ex = Record.Exception(() => _pathParser.ParsePath("/Child/ChildCantSetMe", target));
 
-            // Assert
+            // Then
             ex.ShouldNotBeNull();
             ex.ShouldBeType<JsonPatchPathException>();
             ex.Message.ShouldEqual("Property '/Child/ChildCantSetMe' on target object cannot be set");
@@ -150,16 +150,16 @@ namespace Nancy.JsonPatch.Tests.PathParser
         [Fact]
         public void Refers_To_Items_In_Collections()
         {
-            // Arrange
+            // Given
             var target = new ExampleTarget
             {
                 StringList = new List<string> { "foo", "bar", "baz" }
             };
 
-            // Act
+            // When
             var path = _pathParser.ParsePath("/StringList/1", target);
 
-            // Assert
+            // Then
             path.IsCollection.ShouldBeTrue();
             path.TargetObject.ShouldEqual(target.StringList);
             path.TargetPropertyName.ShouldEqual("1");
@@ -168,16 +168,16 @@ namespace Nancy.JsonPatch.Tests.PathParser
         [Fact]
         public void Returns_Collection_And_Indexer_If_Minus_Passed()
         {
-            // Arrange
+            // Given
             var target = new ExampleTarget
             {
                 StringList = new List<string> { "foo", "bar", "baz" }
             };
 
-            // Act
+            // When
             var path = _pathParser.ParsePath("/StringList/-", target);
 
-            // Assert
+            // Then
             path.IsCollection.ShouldBeTrue();
             path.TargetObject.ShouldEqual(target.StringList);
             path.TargetPropertyName.ShouldEqual("-");
@@ -186,7 +186,7 @@ namespace Nancy.JsonPatch.Tests.PathParser
         [Fact]
         public void Finds_Objects_With_Collection_Indexer_In_Path()
         {
-            // Arrange
+            // Given
             var target = new ExampleTarget
             {
                 ChildList = new List<ExampleTargetChild>
@@ -197,10 +197,10 @@ namespace Nancy.JsonPatch.Tests.PathParser
                 }
             };
 
-            // Act
+            // When
             var path = _pathParser.ParsePath("/ChildList/1/ChildName", target);
 
-            // Assert
+            // Then
             path.IsCollection.ShouldBeFalse();
             path.TargetObject.ShouldEqual(target.ChildList[1]);
             path.TargetPropertyName.ShouldEqual("ChildName");
@@ -209,13 +209,13 @@ namespace Nancy.JsonPatch.Tests.PathParser
         [Fact]
         public void Throws_If_Indexer_In_Path_But_Target_Is_Not_Collection()
         {
-            // Arrange
+            // Given
             var target = new ExampleTarget { Name = "Hello" };
 
-            // Act
+            // When
             var ex = Record.Exception(() => _pathParser.ParsePath("/Name/1/Something", target));
 
-            // Assert
+            // Then
             ex.ShouldNotBeNull();
             ex.ShouldBeType<JsonPatchPathException>();
             ex.Message.ShouldEqual("Could not access path '/Name/1/Something' in target object. Parent object for '1' is not a collection");
@@ -224,7 +224,7 @@ namespace Nancy.JsonPatch.Tests.PathParser
         [Fact]
         public void Throws_If_Target_Is_Not_Collection_But_Last_Part_Of_Path_Is_Indexer()
         {
-            // Arrange
+            // Given
             var target = new ExampleTarget
             {
                 ChildList = new List<ExampleTargetChild>
@@ -235,10 +235,10 @@ namespace Nancy.JsonPatch.Tests.PathParser
                 }
             };
 
-            // Act
+            // When
             var ex = Record.Exception(() => _pathParser.ParsePath("/ChildList/1/ChildName/2", target));
 
-            // Assert
+            // Then
             ex.ShouldNotBeNull();
             ex.ShouldBeType<JsonPatchPathException>();
             ex.Message.ShouldEqual("Could not access path '/ChildList/1/ChildName/2' in target object. Parent object for '2' is not a collection");

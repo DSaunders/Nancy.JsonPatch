@@ -58,7 +58,7 @@
         [Fact]
         public void Deserializes_Operations_With_Collection_Values()
         {
-            // Arrange
+            // Given
             var patchDocument =
                "[" +
                "   { \"op\": \"add\", \"path\": \"/hello\", \"value\": [\"world\",\"foo\"] }" +
@@ -77,7 +77,7 @@
         [Fact]
         public void Deserializes_Complex_Object_Values()
         {
-            // Arrange
+            // Given
             var patchDocument =
                "[" +
                "   { \"op\": \"replace\", \"path\": \"/hello\", \"value\": { \"hello\": \"world\", \"foo\": 2 } }" +
@@ -95,7 +95,7 @@
         [Fact]
         public void Throws_Exception_If_Op_Is_Not_Present()
         {
-            // Arrange
+            // Given
             var patchDocument =
                "[" +
                "   { \"path\": \"/hello\", \"value\": [\"world\",\"foo\"] }" +
@@ -113,7 +113,7 @@
         [Fact]
         public void Throws_Exception_If_Op_Is_Not_String()
         {
-            // Arrange
+            // Given
             var patchDocument =
                "[" +
                "   { \"op\": 42, \"path\": \"/hello\", \"value\": [\"world\",\"foo\"] }" +
@@ -131,7 +131,7 @@
         [Fact]
         public void Throws_Exception_If_Op_Is_Not_Valid()
         {
-            // Arrange
+            // Given
             var patchDocument =
                "[" +
                "   { \"op\": \"thing\", \"path\": \"/hello\", \"value\": [\"world\",\"foo\"] }" +
@@ -149,7 +149,7 @@
         [Fact]
         public void Throws_Exception_If_Path_Is_Not_Present()
         {
-            // Arrange
+            // Given
             var patchDocument =
                "[" +
                "   { \"op\": \"add\", \"value\": [\"world\",\"foo\"] }" +
@@ -167,7 +167,7 @@
         [Fact]
         public void Throws_Exception_If_Path_Is_Not_String()
         {
-            // Arrange
+            // Given
             var patchDocument =
                "[" +
                "   { \"op\": \"add\", \"path\": [32,43], \"value\": [\"world\",\"foo\"] }" +

@@ -25,13 +25,13 @@
             }
         }
 
-        public void Replace(JsonPatchPath path, JsonPatchOperation operation)
+        public void Replace<T>(JsonPatchPath path, T value)
         {
             if (path.IsCollection)
             {
                 var listIndex = int.Parse(path.TargetPropertyName);
-                var targetType = ((IList) path.TargetObject)[listIndex].GetType();
-                var convertedType = ConvertToType(operation.Value, targetType);
+                var targetType = ((IList)path.TargetObject)[listIndex].GetType();
+                var convertedType = ConvertToType(value, targetType);
                 ((IList)path.TargetObject)[listIndex] = convertedType;
             }
             else
@@ -39,9 +39,15 @@
                 var targetProperty = path.TargetObject.GetType()
                     .GetProperty(path.TargetPropertyName);
 
-                var convertedType = ConvertToType(operation.Value, targetProperty.PropertyType);
+                var convertedType = ConvertToType(value, targetProperty.PropertyType);
                 targetProperty.SetValue(path.TargetObject, convertedType);
             }
+        }
+
+        public void Add<T>(JsonPatchPath path, T value)
+        {
+            if (!path.IsCollection)
+                Replace(path, value);
         }
 
         private object ConvertToType(object target, Type type)
