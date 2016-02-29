@@ -15,6 +15,7 @@
         public int ValueType { get; set; }
         public ExampleTargetChild Child { get; set; }
         public List<string> StringList { get; set; }
+        public List<int> IntList { get; set; }
         public List<ExampleTargetChild> ChildList { get; set; }
     }
 }

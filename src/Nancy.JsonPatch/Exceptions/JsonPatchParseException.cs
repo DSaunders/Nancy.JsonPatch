@@ -6,4 +6,12 @@ namespace Nancy.JsonPatch.Exceptions
         {
         }
     }
+
+    public class JsonPatchValueException : JsonPatchException
+    {
+        public JsonPatchValueException(string message)
+            : base(message)
+        {
+        }
+    }
 }

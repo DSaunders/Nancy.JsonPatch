@@ -1,6 +1,7 @@
 ﻿namespace Nancy.JsonPatch.Tests.DocumentParser
 {
     using System.Collections;
+    using System.Collections.Generic;
     using System.Linq;
     using Exceptions;
     using JsonPatch.DocumentParser;
@@ -71,6 +72,24 @@
             list.Count.ShouldEqual(2);
             list[0].ShouldEqual("world");
             list[1].ShouldEqual("foo");
+        }
+
+        [Fact]
+        public void Deserializes_Complex_Object_Values()
+        {
+            // Arrange
+            var patchDocument =
+               "[" +
+               "   { \"op\": \"replace\", \"path\": \"/hello\", \"value\": { \"hello\": \"world\", \"foo\": 2 } }" +
+               "]";
+
+            // When
+            var result = _documentParser.DeserializeJsonPatchRequest(patchDocument);
+
+            // Then
+            var value = result[0].Value as Dictionary<string, object>;
+            value["Hello"].ShouldEqual("world");
+            value["Foo"].ShouldEqual(2);
         }
 
         [Fact]
