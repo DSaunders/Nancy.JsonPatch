@@ -66,11 +66,11 @@ public class JsonPatchResult
     // In the event that an operation fails, this will contain a message describing the failure
     public string Message { get; set; }
 
-    // Can be either
+    // Can be either:
     //  TestFailed - A 'test' operation failed
     //  CouldNotParseJson - The JSON Patch document in the request body is invalid
     //  CouldNotParsePath - A 'path' could not be mapped to a property on the object being patched
-    //  CouldNotParsePath - As above, but for the 'from' path used for copy/move operations
+    //  CouldNotParseFrom - As above, but for the 'from' path used for copy/move operations
     //  OperationFailed - An operation in the document could not be completed (see the Message for details)
     public JsonPatchFailureReason FailureReason { get; set; }
 }
@@ -134,7 +134,7 @@ Since we can't remove properties from strongly-typed objects, if the 'path' does
 ]
 ```
 
-Replaces the property refered to by the 'path' with the new 'value'.
+Replaces the property referred to by the 'path' with the new 'value'.
 
 
 ### Copy
@@ -147,7 +147,7 @@ Replaces the property refered to by the 'path' with the new 'value'.
 
 Copies the value of one property to another.
 
-Performs an *add* operation, taking the value of the item in the 'from' path and adding to the object in refered to by 'path'.
+Performs an *add* operation, taking the value of the item in the 'from' path and adding to the object in referred to by 'path'.
 
 ### Move
 
@@ -169,5 +169,5 @@ The same as *copy*, but performs a *remove* operation on the original 'path' fir
 ]
 ```
 
-Tests that the value of the property refered to by the 'path' matches that specified in 'value'.
+Tests that the value of the property referred to by the 'path' matches that specified in 'value'.
 If the test fails, execution of the JSON Patch document stops and an error is returned from the .JsonPatch() method.
