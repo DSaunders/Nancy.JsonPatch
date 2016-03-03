@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<package >
+  <metadata>
+    <id>$id$</id>
+    <version>$version$</version>
+    <title>Nancy.JsonPatch</title>
+    <authors>Dave Saunders</authors>
+    <owners>Dave Saunders</owners>
+    <licenseUrl>https://github.com/DSaunders/Nancy.JsonPatch/blob/master/LICENSE</licenseUrl>
+    <projectUrl>https://github.com/DSaunders/Nancy.JsonPatch</projectUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>Adds JSON Patch functionality to Nancy</description>
+    <releaseNotes></releaseNotes>
+    <copyright>Copyright 2016</copyright>
+    <tags>Nancy</tags>
+  </metadata>
+</package>

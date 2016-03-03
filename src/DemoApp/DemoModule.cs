@@ -2,7 +2,7 @@
 {
     using Nancy;
     using Nancy.JsonPatch;
-    
+
     public class DemoModule : NancyModule
     {
         private readonly IRepository _repository;

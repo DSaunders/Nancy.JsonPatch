@@ -47,6 +47,10 @@
       <HintPath>..\packages\Nancy.Hosting.Aspnet.1.4.1\lib\net40\Nancy.Hosting.Aspnet.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="Nancy.JsonPatch, Version=0.1.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Nancy.JsonPatch.0.1.0.0\lib\net45\Nancy.JsonPatch.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System.Web.DynamicData" />
     <Reference Include="System.Web.Entity" />
     <Reference Include="System.Web.ApplicationServices" />
@@ -82,12 +86,6 @@
     <None Include="Web.Release.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Nancy.JsonPatch\Nancy.JsonPatch.csproj">
-      <Project>{819e9c68-5279-47de-b0f0-de651a3af004}</Project>
-      <Name>Nancy.JsonPatch</Name>
-    </ProjectReference>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
