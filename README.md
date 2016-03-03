@@ -27,9 +27,11 @@ For a good introduction to JSON Patch, checkout [jsonpatch.com](http://jsonpatch
 
 ## Installation
 
-Install via Nuget:
+Install via NuGet:
 
-** ADD NUGET HERE **
+```
+PM > Install-Package Nancy.JsonPatch
+```
 
 ## Getting Started
 
