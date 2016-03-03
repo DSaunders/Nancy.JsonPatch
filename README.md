@@ -1,4 +1,4 @@
-# Nancy.JsonPatch
+# Nancy.JsonPatch [![NuGet Version](https://img.shields.io/nuget/v/Nancy.JsonPatch.svg?style=flat)](https://www.nuget.org/packages/Nancy.JsonPatch/)
 
 Adds JSON Patch functionality to Nancy
 
@@ -27,9 +27,11 @@ For a good introduction to JSON Patch, checkout [jsonpatch.com](http://jsonpatch
 
 ## Installation
 
-Install via Nuget:
+Install via NuGet:
 
-** ADD NUGET HERE **
+```
+PM > Install-Package Nancy.JsonPatch
+```
 
 ## Getting Started
 
@@ -41,7 +43,9 @@ from anywhere inside your route action.
 
 *Nancy.JsonPatch* will then deserialize the request body and apply the patch operations to your object.
 
-PATCH should be idempotent, so you only want to save the object if all operations in the document succeed. The .JsonPatch() extension method returns a `JsonPatchResult` indicating the result of the patch. This can be implicitly converted to a `bool`, allowing you to do this:
+PATCH should be idempotent, so you only want to save the changes to you object if all operations in the document succeed. 
+
+The .JsonPatch() extension method returns a `JsonPatchResult` indicating the result of the patch. This can be implicitly converted to a `bool`, allowing you to do this:
 
 ```csharp
   if (this.JsonPatch(myThing))
@@ -92,7 +96,7 @@ return HttpStatusCode.NoContent;
 
 ## JSON Patch operations in details
 
-Since C# is strongly typed, our flavour has to be modfified slightly from that described in [RFC6902](http://tools.ietf.org/html/rfc6902).
+Since C# is strongly typed, our implementation has to be slightly different from that described in [RFC6902](http://tools.ietf.org/html/rfc6902).
 
 This is how *Nancy.JsonPatch* implements each JsonPatch operation:
 
@@ -130,7 +134,7 @@ Since we can't remove properties from strongly-typed objects, if the 'path' does
 ]
 ```
 
-Replaces the property refered to by the 'path' with the new'`value'.
+Replaces the property refered to by the 'path' with the new 'value'.
 
 
 ### Copy
