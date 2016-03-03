@@ -92,7 +92,7 @@ return HttpStatusCode.NoContent;
 
 ## JSON Patch operations in details
 
-Since C# is strongly typed, our flavour has to be modfified slightly from that described in [RFC6902](http://tools.ietf.org/html/rfc6902).
+Since C# is strongly typed, our implementation has to be slightly different from that described in [RFC6902](http://tools.ietf.org/html/rfc6902).
 
 This is how *Nancy.JsonPatch* implements each JsonPatch operation:
 
