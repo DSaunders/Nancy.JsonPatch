@@ -130,7 +130,7 @@ Since we can't remove properties from strongly-typed objects, if the 'path' does
 ]
 ```
 
-Replaces the property refered to by the 'path' with the new'`value'.
+Replaces the property refered to by the 'path' with the new 'value'.
 
 
 ### Copy
