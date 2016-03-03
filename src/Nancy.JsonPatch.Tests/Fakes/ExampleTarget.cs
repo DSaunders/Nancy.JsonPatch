@@ -1,14 +1,14 @@
-﻿namespace Nancy.JsonPatch.Tests
+﻿namespace Nancy.JsonPatch.Tests.Fakes
 {
     using System.Collections.Generic;
 
-    internal class ExampleTargetChild
+    public class ExampleTargetChild
     {
         public string ChildName { get; set; }
         public string ChildCantSetMe { get { return "I have no setter"; } }
     }
 
-    internal class ExampleTarget
+    public class ExampleTarget
     {
         public string Name { get; set; }
         public string CantSetMe { get { return "I have no setter"; } }

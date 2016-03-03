@@ -1,3 +1,0 @@
-
-
-- Should we be throwing exceptions or letting the consumer decide what to do?

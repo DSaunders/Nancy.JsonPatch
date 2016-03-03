@@ -2,21 +2,31 @@ namespace Nancy.JsonPatch.PathParser
 {
     using System.Collections;
     using System.Linq;
-    using Exceptions;
     using Models;
 
     // JSON Pointer parsing: http://tools.ietf.org/html/rfc6901
 
     internal class JsonPatchPathParser
     {
-        public JsonPatchPath ParsePath<T>(string path, T target)
+        public JsonPatchPathParserResult ParsePath<T>(string path, T target)
         {
             var pathObject = new JsonPatchPath();
 
             object targetObject = target;
 
             // Iterate the path finding the target object and property
-            var pathSections = SplitPath(path);
+            if (string.IsNullOrEmpty(path))
+                return Failure("Could not parse the path \"\". Nancy.Json cannot modify the root of the object");
+
+            if (!path.StartsWith("/"))
+                return Failure("Could not parse the path \"" + path + "\". Path must start with a '/'");
+
+            if (path.Equals("/"))
+                return Failure("Could not parse the path \"/\". This path is not valid in Nancy.Json");
+
+            // Split and remove the initial slash
+            var pathSections = path.Split('/').Skip(1).ToArray();
+
             for (var i = 0; i < pathSections.Length-1; i++)
             {
                 int ind;
@@ -24,7 +34,8 @@ namespace Nancy.JsonPatch.PathParser
                 {
                     // This propery refers to an item in the collection. Check we are acting on a collection
                     if (!IsCollectionType(targetObject))
-                        throw new JsonPatchPathException(string.Format("Could not access path '{0}' in target object. Parent object for '{1}' is not a collection", path, pathSections[i]));
+                        return Failure("Could not access path '{0}' in target object. Parent object for '{1}' is not a collection", path, pathSections[i]);
+                    
 
                     targetObject = ((IList)targetObject)[ind];
                 }
@@ -33,7 +44,7 @@ namespace Nancy.JsonPatch.PathParser
                     // This is a normal property, rather than a collection
                     targetObject = GetValueOfProperty(targetObject, pathSections[i]);
                     if (targetObject == null)
-                        throw new JsonPatchPathException(string.Format("Could not access path '{0}' in target object. '{1}' is null", path, pathSections[i]));
+                        return Failure("Could not access path '{0}' in target object. '{1}' is null", path, pathSections[i]);
                 }
             }
 
@@ -44,9 +55,9 @@ namespace Nancy.JsonPatch.PathParser
             {
                 // Last section of path is an indexer, return the parent object as the target
                 pathObject.IsCollection = true;
-                
+
                 if (!IsCollectionType(targetObject))
-                    throw new JsonPatchPathException(string.Format("Could not access path '{0}' in target object. Parent object for '{1}' is not a collection", path, lastProperty));
+                    return Failure( "Could not access path '{0}' in target object. Parent object for '{1}' is not a collection", path, lastProperty);
 
             }
             else
@@ -54,22 +65,27 @@ namespace Nancy.JsonPatch.PathParser
                 // Property is not a collection, return 
                 var targetProperty = targetObject.GetType().GetProperty(lastProperty);
                 if (targetProperty == null)
-                    throw new JsonPatchPathException(string.Format("Could not find path '{0}' in target object", path));
+                    return Failure("Could not find path '{0}' in target object", path);
 
                 if (!targetProperty.CanWrite)
-                    throw new JsonPatchPathException(string.Format("Property '{0}' on target object cannot be set",
-                        path));
+                    return Failure("Property '{0}' on target object cannot be set", path);
             }
 
             pathObject.TargetObject = targetObject;
             pathObject.TargetPropertyName = lastProperty;
 
-            return pathObject;
+            return new JsonPatchPathParserResult
+            {
+                Path = pathObject
+            };
         }
 
         private object GetValueOfProperty<T>(T target, string propertyName)
         {
-            return target.GetType().GetProperty(propertyName).GetValue(target);
+            var property =  target.GetType().GetProperty(propertyName);
+            return property == null 
+                ? null 
+                : property.GetValue(target);
         }
 
         private bool IsCollectionType(object obj)
@@ -77,19 +93,12 @@ namespace Nancy.JsonPatch.PathParser
             return obj is IEnumerable && !(obj is string);
         }
 
-        private static string[] SplitPath(string path)
+        private static JsonPatchPathParserResult Failure(string message, params object[] parameters)
         {
-            if (string.IsNullOrEmpty(path))
-                throw new JsonPatchPathException("Could not parse the path \"\". Nancy.Json cannot modify the root of the object");
-
-            if (!path.StartsWith("/"))
-                throw new JsonPatchPathException("Could not parse the path \"" + path + "\". Path must start with a '/'");
-
-            if (path.Equals("/"))
-                throw new JsonPatchPathException("Could not parse the path \"/\". This path is not valid in Nancy.Json");
-
-            // Split and remove the initial slash
-            return path.Split('/').Skip(1).ToArray();
+            return new JsonPatchPathParserResult
+            {
+                Error = string.Format(message, parameters)
+            };
         }
     }
 

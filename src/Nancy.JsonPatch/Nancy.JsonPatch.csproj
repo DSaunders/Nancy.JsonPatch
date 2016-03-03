@@ -43,16 +43,20 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Exceptions\JsonPatchException.cs" />
     <Compile Include="Exceptions\JsonPatchParseException.cs" />
-    <Compile Include="Exceptions\JsonPatchPathException.cs" />
+    <Compile Include="JsonPatchFailureReason.cs" />
+    <Compile Include="JsonPatchResult.cs" />
+    <Compile Include="JsonPatchModuleExtensions.cs" />
+    <Compile Include="JsonPatchExecutor.cs" />
     <Compile Include="OperationProcessor\JsonPatchOperationExecutor.cs" />
+    <Compile Include="OperationProcessor\JsonPatchOperationExecutorResult.cs" />
     <Compile Include="PathParser\JsonPatchPathParser.cs" />
     <Compile Include="Models\JsonPatchPath.cs" />
     <Compile Include="DocumentParser\JsonPatchDocumentParser.cs" />
     <Compile Include="Models\JsonPatchOperation.cs" />
     <Compile Include="Models\JsonPatchOpCode.cs" />
     <Compile Include="DocumentParser\JsonPatchRequestConverter.cs" />
+    <Compile Include="PathParser\JsonPatchPathParserResult.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

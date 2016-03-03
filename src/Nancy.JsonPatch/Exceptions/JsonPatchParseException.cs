@@ -1,16 +1,10 @@
 namespace Nancy.JsonPatch.Exceptions
 {
-    public class JsonPatchParseException : JsonPatchException
+    using System;
+
+    public class JsonPatchParseException : Exception
     {
         public JsonPatchParseException(string message) : base(message)
-        {
-        }
-    }
-
-    public class JsonPatchValueException : JsonPatchException
-    {
-        public JsonPatchValueException(string message)
-            : base(message)
         {
         }
     }
