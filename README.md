@@ -1,4 +1,4 @@
-# Nancy.JsonPatch
+# Nancy.JsonPatch [![NuGet Version](https://img.shields.io/nuget/v/Nancy.JsonPatch.svg?style=flat)](https://www.nuget.org/packages/Nancy.JsonPatch/)
 
 Adds JSON Patch functionality to Nancy
 
