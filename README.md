@@ -43,7 +43,7 @@ from anywhere inside your route action.
 
 *Nancy.JsonPatch* will then deserialize the request body and apply the patch operations to your object.
 
-PATCH should be idempotent, so you only want to save the changes to you object if all operations in the document succeed. 
+[RFC6902](http://tools.ietf.org/html/rfc6902) states that if one operation in the document fails, the entire document should _not be considered successful_. In other words, you only want to save the changes to your object if all operations in the document succeed. 
 
 The .JsonPatch() extension method returns a `JsonPatchResult` indicating the result of the patch. This can be implicitly converted to a `bool`, allowing you to do this:
 
