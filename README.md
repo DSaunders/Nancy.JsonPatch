@@ -171,3 +171,7 @@ The same as *copy*, but performs a *remove* operation on the original 'path' fir
 
 Tests that the value of the property referred to by the 'path' matches that specified in 'value'.
 If the test fails, execution of the JSON Patch document stops and an error is returned from the .JsonPatch() method.
+
+
+## So is this fine to use right now?
+Yeah! If you do find any issues though, please let me know (or, even better, submit a pull request :smile: ).
