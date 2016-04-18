@@ -58,6 +58,8 @@
     <Compile Include="DocumentParser\JsonPatchRequestConverter.cs" />
     <Compile Include="PathParser\JsonPatchPathParserResult.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="PropertyResolver\IJsonPatchPropertyResolver.cs" />
+    <Compile Include="PropertyResolver\JsonPatchPropertyResolver.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

@@ -1,13 +1,23 @@
 namespace Nancy.JsonPatch.PathParser
 {
+    using System;
     using System.Collections;
     using System.Linq;
+    using System.Reflection;
     using Models;
+    using PropertyResolver;
 
     // JSON Pointer parsing: http://tools.ietf.org/html/rfc6901
 
     internal class JsonPatchPathParser
     {
+        private readonly IJsonPatchPropertyResolver _propertyResolver;
+
+        public JsonPatchPathParser(IJsonPatchPropertyResolver propertyResolver)
+        {
+            _propertyResolver = propertyResolver;
+        }
+
         public JsonPatchPathParserResult ParsePath<T>(string path, T target)
         {
             var pathObject = new JsonPatchPath();
@@ -32,7 +42,7 @@ namespace Nancy.JsonPatch.PathParser
                 int ind;
                 if (int.TryParse(pathSections[i], out ind))
                 {
-                    // This propery refers to an item in the collection. Check we are acting on a collection
+                    // This property refers to an item in the collection. Check we are acting on a collection
                     if (!IsCollectionType(targetObject))
                         return Failure("Could not access path '{0}' in target object. Parent object for '{1}' is not a collection", path, pathSections[i]);
                     
@@ -62,6 +72,8 @@ namespace Nancy.JsonPatch.PathParser
             }
             else
             {
+                lastProperty = _propertyResolver.Resolve(targetObject.GetType(), lastProperty);
+
                 // Property is not a collection, return 
                 var targetProperty = targetObject.GetType().GetProperty(lastProperty);
                 if (targetProperty == null)
@@ -80,9 +92,16 @@ namespace Nancy.JsonPatch.PathParser
             };
         }
 
+        private PropertyInfo GetProperty(Type type, string propertyName)
+        {
+            var resolvedPropertyName = _propertyResolver.Resolve(type, propertyName);
+
+            return type.GetProperty(resolvedPropertyName);
+        }
+
         private object GetValueOfProperty<T>(T target, string propertyName)
         {
-            var property =  target.GetType().GetProperty(propertyName);
+            var property = GetProperty(target.GetType(), propertyName);
             return property == null 
                 ? null 
                 : property.GetValue(target);
