@@ -1,0 +1,3 @@
+﻿
+This project exists as a sample that uses the latest version of the Nuget package.
+It does not reference the class library project directly.
