@@ -3,13 +3,19 @@
     using System;
     using System.Collections.Generic;
     using Models;
+    using PropertyResolver;
     
     internal class JsonPatchExecutor
     {
         public JsonPatchResult Patch<T>(string requestBody, T target)
         {
+            return Patch(requestBody, target, new JsonPatchPropertyResolver());
+        }
+
+        public JsonPatchResult Patch<T>(string requestBody, T target, IJsonPatchPropertyResolver propertyResolver)
+        {
             var documentParser = new DocumentParser.JsonPatchDocumentParser();
-            var pathParser = new PathParser.JsonPatchPathParser();
+            var pathParser = new PathParser.JsonPatchPathParser(propertyResolver);
             var operationExecutor = new OperationProcessor.JsonPatchOperationExecutor();
             
             List<JsonPatchOperation> operations;

@@ -82,6 +82,7 @@
     <Compile Include="PathParser\JsonPatchPathParserTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="DocumentParser\JsonPatchDocumentParserTests.cs" />
+    <Compile Include="PropertyResolver\JsonPatchPropertyResolverTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
