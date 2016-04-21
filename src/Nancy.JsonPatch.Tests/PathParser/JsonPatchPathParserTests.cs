@@ -4,7 +4,7 @@ namespace Nancy.JsonPatch.Tests.PathParser
     using System.Collections.Generic;
     using Fakes;
     using JsonPatch.PathParser;
-    using PropertyResolver;
+    using JsonPatch.PropertyResolver;
     using Should;
     using Xunit;
 
